@@ -7,7 +7,7 @@ class AppColors {
   static const Color pale         = Color(0xFF6EE0A0);
   static const Color lightest     = Color(0xFFA8D5B8);
 
-  static const Color background   = Color(0xFFF4F7F5);
+  static const Color background   = Color.fromARGB(255, 204, 244, 220);
   static const Color surface      = Color(0xFFFFFFFF);
   static const Color surfaceAlt   = Color(0xFFEAF5EE);
   static const Color border       = Color(0xFFD0E8D8);
