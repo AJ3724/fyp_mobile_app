@@ -876,15 +876,15 @@ class _ItemDetailSheet extends StatelessWidget {
             decoration: BoxDecoration(color: AppColors.surfaceAlt, borderRadius: BorderRadius.circular(14)),
             child: Column(
               children: [
-                _InfoRow(label: 'Previous Temp', value: '${item.oldTemp}°C'),
-                const SizedBox(height: 10),
+                // _InfoRow(label: 'Previous Temp', value: '${item.oldTemp}°C'),
+                // const SizedBox(height: 10),
                 _InfoRow(label: 'Current Temp',  value: '${item.newTemp}°C'),
                 const SizedBox(height: 10),
                 _InfoRow(label: 'Humidity',      value: '${item.humidity}%'),
-                const SizedBox(height: 10),
-                _InfoRow(label: 'Initial Life',  value: '${item.initialLife}h'),
-                const SizedBox(height: 10),
-                _InfoRow(label: 'Time Interval', value: '${item.timeBeforeTimeInBetween}h'),
+                // const SizedBox(height: 10),
+                // _InfoRow(label: 'Initial Life',  value: '${item.initialLife}h'),
+                // const SizedBox(height: 10),
+                // _InfoRow(label: 'Time Interval', value: '${item.timeBeforeTimeInBetween}h'),
                 const SizedBox(height: 10),
                 _InfoRow(label: 'Life Remaining', value: '${item.lifeRemaining}h'),
                 if (item.oldDecay != null) ...[
