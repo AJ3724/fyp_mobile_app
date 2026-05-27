@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import '../theme.dart';
 import '../widgets/shared.dart';
 
-// ── API config ────────────────────────────────────────────────────────────────
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 String get _apiUrl {
@@ -55,13 +54,22 @@ class PredictionItem {
       newTemp: int.parse(json['new_temp'].toString()),
       humidity: int.parse(json['humidity'].toString()),
       initialLife: int.parse(json['initial_life'].toString()),
-      timeBeforeTimeInBetween: int.parse(json['time_before_time_in_between'].toString()),
+      timeBeforeTimeInBetween:
+          int.parse(json['time_before_time_in_between'].toString()),
       lifeRemaining: int.parse(json['life_remaining'].toString()),
       status: json['status'] ?? '',
-      itemNameVal: json['item_name_val'] != null ? int.parse(json['item_name_val'].toString()) : null,
-      typeVal: json['type_val'] != null ? int.parse(json['type_val'].toString()) : null,
-      oldDecay: json['old_decay'] != null ? double.parse(json['old_decay'].toString()) : null,
-      spikeDamage: json['spike_damage'] != null ? double.parse(json['spike_damage'].toString()) : null,
+      itemNameVal: json['item_name_val'] != null
+          ? int.parse(json['item_name_val'].toString())
+          : null,
+      typeVal: json['type_val'] != null
+          ? int.parse(json['type_val'].toString())
+          : null,
+      oldDecay: json['old_decay'] != null
+          ? double.parse(json['old_decay'].toString())
+          : null,
+      spikeDamage: json['spike_damage'] != null
+          ? double.parse(json['spike_damage'].toString())
+          : null,
     );
   }
 
@@ -70,10 +78,14 @@ class PredictionItem {
 
   FridgeStatus get fridgeStatus {
     switch (status.toLowerCase()) {
-      case 'good': return FridgeStatus.good;
-      case 'acceptable': return FridgeStatus.acceptable;
-      case 'danger': return FridgeStatus.danger;
-      case 'spoiled': return FridgeStatus.spoiled;
+      case 'good':
+        return FridgeStatus.good;
+      case 'acceptable':
+        return FridgeStatus.acceptable;
+      case 'danger':
+        return FridgeStatus.danger;
+      case 'spoiled':
+        return FridgeStatus.spoiled;
       default:
         if (lifeRemaining <= 0) return FridgeStatus.spoiled;
         if (lifeRemaining / initialLife < 0.2) return FridgeStatus.danger;
@@ -84,37 +96,53 @@ class PredictionItem {
 
   Color get statusColor {
     switch (fridgeStatus) {
-      case FridgeStatus.good: return AppColors.medium;
-      case FridgeStatus.acceptable: return AppColors.light;
-      case FridgeStatus.danger: return AppColors.dangerColor;
-      case FridgeStatus.spoiled: return AppColors.spoiledColor;
+      case FridgeStatus.good:
+        return AppColors.goodColor;
+      case FridgeStatus.acceptable:
+        return AppColors.acceptColor;
+      case FridgeStatus.danger:
+        return AppColors.dangerColor;
+      case FridgeStatus.spoiled:
+        return AppColors.spoiledColor;
     }
   }
 
   Color get badgeBg {
     switch (fridgeStatus) {
-      case FridgeStatus.good: return AppColors.goodBg;
-      case FridgeStatus.acceptable: return AppColors.acceptBg;
-      case FridgeStatus.danger: return AppColors.dangerBg;
-      case FridgeStatus.spoiled: return AppColors.spoiledBg;
+      case FridgeStatus.good:
+        return AppColors.goodBg;
+      case FridgeStatus.acceptable:
+        return AppColors.acceptBg;
+      case FridgeStatus.danger:
+        return AppColors.dangerBg;
+      case FridgeStatus.spoiled:
+        return AppColors.spoiledBg;
     }
   }
 
   Color get badgeText {
     switch (fridgeStatus) {
-      case FridgeStatus.good: return AppColors.goodText;
-      case FridgeStatus.acceptable: return AppColors.acceptText;
-      case FridgeStatus.danger: return AppColors.dangerText;
-      case FridgeStatus.spoiled: return AppColors.spoiledText;
+      case FridgeStatus.good:
+        return AppColors.goodText;
+      case FridgeStatus.acceptable:
+        return AppColors.acceptText;
+      case FridgeStatus.danger:
+        return AppColors.dangerText;
+      case FridgeStatus.spoiled:
+        return AppColors.spoiledText;
     }
   }
 
   String get statusLabel {
     switch (fridgeStatus) {
-      case FridgeStatus.good: return 'Good';
-      case FridgeStatus.acceptable: return 'Acceptable';
-      case FridgeStatus.danger: return 'Danger';
-      case FridgeStatus.spoiled: return 'Spoiled';
+      case FridgeStatus.good:
+        return 'Good';
+      case FridgeStatus.acceptable:
+        return 'Acceptable';
+      case FridgeStatus.danger:
+        return 'Danger';
+      case FridgeStatus.spoiled:
+        return 'Spoiled';
     }
   }
 
@@ -127,22 +155,30 @@ class PredictionItem {
 
   IconData get icon {
     switch (type.toLowerCase()) {
-      case 'vegetable': return Icons.grass_rounded;
-      case 'fruit': return Icons.energy_savings_leaf_rounded;
-      case 'dairy': return Icons.water_drop_outlined;
-      case 'meat': return Icons.restaurant_rounded;
-      case 'herb': return Icons.eco_rounded;
-      case 'grain': return Icons.grain_rounded;
-      case 'condiment': return Icons.local_dining_rounded;
-      case 'beverage': return Icons.local_drink_rounded;
-      default: return Icons.kitchen_rounded;
+      case 'vegetable':
+        return Icons.grass_rounded;
+      case 'fruit':
+        return Icons.energy_savings_leaf_rounded;
+      case 'dairy':
+        return Icons.water_drop_outlined;
+      case 'meat':
+        return Icons.restaurant_rounded;
+      case 'herb':
+        return Icons.eco_rounded;
+      case 'grain':
+        return Icons.grain_rounded;
+      case 'condiment':
+        return Icons.local_dining_rounded;
+      case 'beverage':
+        return Icons.local_drink_rounded;
+      default:
+        return Icons.kitchen_rounded;
     }
   }
 }
 
 enum FridgeStatus { good, acceptable, danger, spoiled }
 
-// ── Category metadata ─────────────────────────────────────────────────────────
 const Map<String, IconData> categoryIcons = {
   'vegetable': Icons.grass_rounded,
   'fruit': Icons.energy_savings_leaf_rounded,
@@ -157,30 +193,6 @@ const Map<String, IconData> categoryIcons = {
 const List<String> categoryOrder = [
   'vegetable', 'fruit', 'herb', 'meat', 'dairy', 'grain', 'condiment', 'beverage',
 ];
-
-// ── Fridge design constants ───────────────────────────────────────────────────
-class FridgeColors {
-  // Fridge outer shell
-  static const Color outerWall       = Color(0xFFD8E8DF);
-  // Interior walls — cool white with very slight blue tint
-  static const Color interiorWall    = Color(0xFFECF5F1);
-  static const Color interiorSide    = Color(0xFFDCECE5);
-  // Shelf glass
-  static const Color shelfGlass      = Color(0xFFB8D8C8);
-  static const Color shelfEdge       = Color(0xFF8DBCAA);
-  static const Color shelfShadow     = Color(0x22000000);
-  // Interior lighting glow at top
-  static const Color lightGlow       = Color(0xFFEFFFFA);
-  static const Color lightStrip      = Color(0xFFD0F0E4);
-  // Card background — frosted feel
-  static const Color cardBg          = Color(0xFFF5FBFF);
-  static const Color cardBorder      = Color(0xFFCCE4D8);
-  // Shelf label pill
-  static const Color shelfLabelBg    = Color(0xFFCCE8DA);
-  static const Color shelfLabelText  = Color(0xFF1A5C3A);
-  // Fridge inner shadow on sides
-  static const Color sideDepth       = Color(0x18000000);
-}
 
 // ── Main Screen ───────────────────────────────────────────────────────────────
 class FridgeScreen extends StatefulWidget {
@@ -202,9 +214,13 @@ class _FridgeScreenState extends State<FridgeScreen> {
   }
 
   Future<void> _fetchItems() async {
-    setState(() { _loading = true; _error = null; });
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
     try {
-      final response = await http.get(Uri.parse(_apiUrl))
+      final response = await http
+          .get(Uri.parse(_apiUrl))
           .timeout(const Duration(seconds: 10));
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
@@ -213,10 +229,16 @@ class _FridgeScreenState extends State<FridgeScreen> {
           _loading = false;
         });
       } else {
-        setState(() { _error = 'Server error: ${response.statusCode}'; _loading = false; });
+        setState(() {
+          _error = 'Server error: ${response.statusCode}';
+          _loading = false;
+        });
       }
     } catch (e) {
-      setState(() { _error = 'Could not reach server.\n$e'; _loading = false; });
+      setState(() {
+        _error = 'Could not reach server.\n$e';
+        _loading = false;
+      });
     }
   }
 
@@ -249,21 +271,26 @@ class _FridgeScreenState extends State<FridgeScreen> {
     final dangerCount  = _items.where((i) => i.fridgeStatus == FridgeStatus.danger).length;
     final spoiledCount = _items.where((i) => i.fridgeStatus == FridgeStatus.spoiled).length;
     final goodCount    = _items.where((i) => i.fridgeStatus == FridgeStatus.good).length;
+    final acceptCount  = _items.where((i) => i.fridgeStatus == FridgeStatus.acceptable).length;
     final grouped      = _buildGrouped();
     final categories   = grouped.keys.toList();
 
     return Scaffold(
-      backgroundColor: FridgeColors.outerWall,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: FridgeColors.outerWall,
+        backgroundColor: AppColors.surface,
         elevation: 0,
         scrolledUnderElevation: 0,
         title: Row(
-          children: [
-            const Icon(Icons.kitchen_rounded, size: 18, color: AppColors.textSub),
-            const SizedBox(width: 8),
-            const Text('My Fridge'),
+          children: const [
+            Icon(Icons.kitchen_rounded, size: 18, color: AppColors.textSub),
+            SizedBox(width: 8),
+            Text('My Fridge'),
           ],
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(0.5),
+          child: Container(height: 0.5, color: AppColors.border),
         ),
         actions: [
           Padding(
@@ -271,28 +298,32 @@ class _FridgeScreenState extends State<FridgeScreen> {
             child: Row(
               children: [
                 Text('${_items.length} items',
-                    style: const TextStyle(fontSize: 12, color: AppColors.textSub)),
+                    style: const TextStyle(
+                        fontSize: 12, color: AppColors.textSub)),
                 const SizedBox(width: 10),
                 GestureDetector(
                   onTap: _fetchItems,
-                  child: const Icon(Icons.refresh_rounded, color: AppColors.textSub),
+                  child: const Icon(Icons.refresh_rounded,
+                      color: AppColors.textSub),
                 ),
               ],
             ),
           ),
         ],
       ),
-
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _error != null
               ? _ErrorView(message: _error!, onRetry: _fetchItems)
               : _items.isEmpty
-                  ? const Center(child: Text('No items found', style: TextStyle(color: AppColors.textSub)))
-                  : _FridgeInterior(
+                  ? const Center(
+                      child: Text('No items found',
+                          style: TextStyle(color: AppColors.textSub)))
+                  : _FridgeBody(
                       dangerCount: dangerCount,
                       spoiledCount: spoiledCount,
                       goodCount: goodCount,
+                      acceptCount: acceptCount,
                       grouped: grouped,
                       categories: categories,
                       onItemTap: (item) => _showItemDetail(context, item),
@@ -301,19 +332,143 @@ class _FridgeScreenState extends State<FridgeScreen> {
   }
 }
 
-// ── Fridge Interior Layout ────────────────────────────────────────────────────
-class _FridgeInterior extends StatelessWidget {
-  final int dangerCount;
-  final int spoiledCount;
-  final int goodCount;
+// ── Fridge Body ───────────────────────────────────────────────────────────────
+class _FridgeBody extends StatelessWidget {
+  final int dangerCount, spoiledCount, goodCount, acceptCount;
   final Map<String, List<PredictionItem>> grouped;
   final List<String> categories;
   final void Function(PredictionItem) onItemTap;
 
-  const _FridgeInterior({
+  const _FridgeBody({
     required this.dangerCount,
     required this.spoiledCount,
     required this.goodCount,
+    required this.acceptCount,
+    required this.grouped,
+    required this.categories,
+    required this.onItemTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ── Status overview card ─────────────────────────────────────────
+          _StatusOverviewCard(
+            goodCount: goodCount,
+            acceptCount: acceptCount,
+            dangerCount: dangerCount,
+            spoiledCount: spoiledCount,
+          ),
+
+          const SizedBox(height: 20),
+
+          // ── Fridge interior container ────────────────────────────────────
+          _FridgeContainer(
+            grouped: grouped,
+            categories: categories,
+            onItemTap: onItemTap,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Status Overview Card ──────────────────────────────────────────────────────
+class _StatusOverviewCard extends StatelessWidget {
+  final int goodCount, acceptCount, dangerCount, spoiledCount;
+  const _StatusOverviewCard({
+    required this.goodCount,
+    required this.acceptCount,
+    required this.dangerCount,
+    required this.spoiledCount,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.border, width: 0.8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'FRIDGE OVERVIEW',
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textMuted,
+              letterSpacing: 1.2,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              _OvCard(count: goodCount,    label: 'Good',       bg: AppColors.goodBg,    text: AppColors.goodText),
+              const SizedBox(width: 8),
+              _OvCard(count: acceptCount,  label: 'Acceptable', bg: AppColors.acceptBg,  text: AppColors.acceptText),
+              const SizedBox(width: 8),
+              _OvCard(count: dangerCount,  label: 'Danger',     bg: AppColors.dangerBg,  text: AppColors.dangerText),
+              const SizedBox(width: 8),
+              _OvCard(count: spoiledCount, label: 'Spoiled',    bg: AppColors.spoiledBg, text: AppColors.spoiledText),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _OvCard extends StatelessWidget {
+  final int count;
+  final String label;
+  final Color bg, text;
+  const _OvCard(
+      {required this.count,
+      required this.label,
+      required this.bg,
+      required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration:
+            BoxDecoration(color: bg, borderRadius: BorderRadius.circular(12)),
+        child: Column(
+          children: [
+            Text('$count',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: text)),
+            const SizedBox(height: 2),
+            Text(label,
+                style: TextStyle(fontSize: 9, color: text.withOpacity(0.8)),
+                textAlign: TextAlign.center),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ── Fridge Container ──────────────────────────────────────────────────────────
+class _FridgeContainer extends StatelessWidget {
+  final Map<String, List<PredictionItem>> grouped;
+  final List<String> categories;
+  final void Function(PredictionItem) onItemTap;
+
+  const _FridgeContainer({
     required this.grouped,
     required this.categories,
     required this.onItemTap,
@@ -322,88 +477,39 @@ class _FridgeInterior extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // Fridge outer bezel / door frame
-      margin: const EdgeInsets.fromLTRB(12, 0, 12, 16),
       decoration: BoxDecoration(
-        color: FridgeColors.interiorSide,
-        borderRadius: BorderRadius.circular(18),
-        // Inset shadow to simulate interior depth on sides
+        color: AppColors.fridgeWall,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.fridgeShelfEdge.withOpacity(0.4), width: 1.5),
         boxShadow: [
-          BoxShadow(color: FridgeColors.sideDepth, blurRadius: 18, spreadRadius: -4, offset: const Offset(0, 4)),
+          BoxShadow(
+            color: AppColors.primary.withOpacity(0.08),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
+          ),
         ],
-        border: Border.all(color: FridgeColors.shelfEdge.withOpacity(0.5), width: 1.5),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(17),
-        child: Stack(
+        borderRadius: BorderRadius.circular(19),
+        child: Column(
           children: [
-            // ── Interior back wall ──────────────────────────────────────────
-            Positioned.fill(
-              child: CustomPaint(painter: _FridgeWallPainter()),
-            ),
+            // ── LED light strip ────────────────────────────────────────────
+            _LightStrip(),
 
-            // ── Content scroll ──────────────────────────────────────────────
-            SingleChildScrollView(
-              physics: const ClampingScrollPhysics(),
-              child: Column(
-                children: [
-                  // ── Top light strip ───────────────────────────────────────
-                  _LightStrip(),
-
-                  // ── Shelf 0: Status dashboard ─────────────────────────────
-                  _FridgeShelf(
-                    label: 'Overview',
-                    labelIcon: Icons.dashboard_rounded,
-                    isFirst: true,
-                    child: _StatusShelfContent(
-                      dangerCount: dangerCount,
-                      spoiledCount: spoiledCount,
-                      goodCount: goodCount,
-                      total: dangerCount + spoiledCount + goodCount,
-                    ),
-                  ),
-
-                  // ── One shelf per category ────────────────────────────────
-                  for (final category in categories)
-                    _FridgeShelf(
-                      label: '${category[0].toUpperCase()}${category.substring(1)}s',
-                      labelIcon: categoryIcons[category] ?? Icons.category_rounded,
-                      count: grouped[category]!.length,
-                      child: _CategoryShelfContent(
-                        items: grouped[category]!,
-                        onTap: onItemTap,
-                      ),
-                    ),
-
-                  const SizedBox(height: 20),
-                ],
-              ),
-            ),
-
-            // ── Left side depth shadow ───────────────────────────────────────
-            Positioned(
-              top: 0, left: 0, bottom: 0,
-              width: 10,
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [FridgeColors.sideDepth, Colors.transparent],
-                  ),
+            // ── Category shelves ───────────────────────────────────────────
+            for (final category in categories) ...[
+              _FridgeShelf(
+                label: '${category[0].toUpperCase()}${category.substring(1)}s',
+                labelIcon: categoryIcons[category] ?? Icons.category_rounded,
+                count: grouped[category]!.length,
+                child: _CategoryGrid(
+                  items: grouped[category]!,
+                  onTap: onItemTap,
                 ),
               ),
-            ),
-            // ── Right side depth shadow ──────────────────────────────────────
-            Positioned(
-              top: 0, right: 0, bottom: 0,
-              width: 10,
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.transparent, FridgeColors.sideDepth],
-                  ),
-                ),
-              ),
-            ),
+            ],
+
+            const SizedBox(height: 16),
           ],
         ),
       ),
@@ -411,57 +517,32 @@ class _FridgeInterior extends StatelessWidget {
   }
 }
 
-// ── Fridge Wall Custom Painter ────────────────────────────────────────────────
-// Draws the cool-white interior wall with subtle vertical ribbing
-class _FridgeWallPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    // Base wall fill
-    canvas.drawRect(
-      Rect.fromLTWH(0, 0, size.width, size.height),
-      Paint()..color = FridgeColors.interiorWall,
-    );
-
-    // Subtle vertical ribbing lines (like real fridge interior)
-    final ribPaint = Paint()
-      ..color = FridgeColors.shelfGlass.withOpacity(0.25)
-      ..strokeWidth = 0.5;
-
-    for (double x = 20; x < size.width; x += 28) {
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), ribPaint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(_FridgeWallPainter old) => false;
-}
-
-// ── Light Strip at Top ────────────────────────────────────────────────────────
+// ── LED Light Strip ───────────────────────────────────────────────────────────
 class _LightStrip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 14,
+      height: 16,
+      width: double.infinity,
       decoration: BoxDecoration(
-        color: FridgeColors.lightStrip,
+        color: AppColors.goodBg,
         boxShadow: [
           BoxShadow(
-            color: FridgeColors.lightGlow.withOpacity(0.9),
-            blurRadius: 20,
-            spreadRadius: 4,
-            offset: const Offset(0, 6),
+            color: AppColors.pale.withOpacity(0.6),
+            blurRadius: 16,
+            spreadRadius: 2,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Row(
         children: [
-          // LED strip dots
-          for (int i = 0; i < 12; i++) ...[
-            const SizedBox(width: 8),
+          for (int i = 0; i < 14; i++) ...[
+            const SizedBox(width: 10),
             Container(
               width: 4, height: 4,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withOpacity(0.8),
                 shape: BoxShape.circle,
               ),
             ),
@@ -473,20 +554,17 @@ class _LightStrip extends StatelessWidget {
 }
 
 // ── Fridge Shelf ──────────────────────────────────────────────────────────────
-// Wraps each category with a glass shelf visual below and a label pill above
 class _FridgeShelf extends StatelessWidget {
   final String label;
   final IconData labelIcon;
   final int? count;
   final Widget child;
-  final bool isFirst;
 
   const _FridgeShelf({
     required this.label,
     required this.labelIcon,
     required this.child,
     this.count,
-    this.isFirst = false,
   });
 
   @override
@@ -494,48 +572,47 @@ class _FridgeShelf extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // ── Shelf label row ───────────────────────────────────────────────
+        // Label
         Padding(
-          padding: EdgeInsets.fromLTRB(14, isFirst ? 10 : 6, 14, 4),
+          padding: const EdgeInsets.fromLTRB(14, 12, 14, 6),
           child: Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: FridgeColors.shelfLabelBg,
+                  color: AppColors.fridgeLabelBg,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(labelIcon, size: 12, color: FridgeColors.shelfLabelText),
+                    Icon(labelIcon,
+                        size: 12, color: AppColors.fridgeLabelText),
                     const SizedBox(width: 5),
                     Text(
                       label,
                       style: const TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
-                        color: FridgeColors.shelfLabelText,
-                        letterSpacing: 0.4,
+                        color: AppColors.fridgeLabelText,
+                        letterSpacing: 0.3,
                       ),
                     ),
                     if (count != null) ...[
-                      const SizedBox(width: 5),
+                      const SizedBox(width: 6),
                       Container(
-                        width: 16, height: 16,
+                        width: 17, height: 17,
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withOpacity(0.15),
+                          color: AppColors.primary.withOpacity(0.12),
                           shape: BoxShape.circle,
                         ),
                         child: Center(
-                          child: Text(
-                            '$count',
-                            style: const TextStyle(
-                              fontSize: 9,
-                              fontWeight: FontWeight.w700,
-                              color: FridgeColors.shelfLabelText,
-                            ),
-                          ),
+                          child: Text('$count',
+                              style: const TextStyle(
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.fridgeLabelText)),
                         ),
                       ),
                     ],
@@ -546,13 +623,13 @@ class _FridgeShelf extends StatelessWidget {
           ),
         ),
 
-        // ── Shelf content area ────────────────────────────────────────────
+        // Content
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: child,
         ),
 
-        // ── Glass shelf edge ──────────────────────────────────────────────
+        // Glass shelf edge
         const SizedBox(height: 8),
         CustomPaint(
           size: const Size(double.infinity, 14),
@@ -563,19 +640,14 @@ class _FridgeShelf extends StatelessWidget {
   }
 }
 
-// ── Shelf Edge Painter ────────────────────────────────────────────────────────
-// Draws the frosted glass shelf edge
 class _ShelfEdgePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    // Glass body
-    final glassRect = RRect.fromRectAndRadius(
-      Rect.fromLTWH(0, 2, size.width, 10),
-      const Radius.circular(2),
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+          Rect.fromLTWH(0, 2, size.width, 10), const Radius.circular(2)),
+      Paint()..color = AppColors.fridgeShelf,
     );
-    canvas.drawRRect(glassRect, Paint()..color = FridgeColors.shelfGlass);
-
-    // Highlight on top edge
     canvas.drawLine(
       const Offset(0, 2),
       Offset(size.width, 2),
@@ -583,23 +655,16 @@ class _ShelfEdgePainter extends CustomPainter {
         ..color = Colors.white.withOpacity(0.7)
         ..strokeWidth = 1.2,
     );
-
-    // Shadow under shelf
     canvas.drawLine(
       Offset(4, 12),
       Offset(size.width - 4, 12),
       Paint()
-        ..color = FridgeColors.shelfShadow
+        ..color = Colors.black.withOpacity(0.08)
         ..strokeWidth = 2,
     );
-
-    // Left and right bracket dots
     for (final x in [8.0, size.width - 8]) {
       canvas.drawCircle(
-        Offset(x, 7),
-        3,
-        Paint()..color = FridgeColors.shelfEdge,
-      );
+          Offset(x, 7), 3, Paint()..color = AppColors.fridgeShelfEdge);
     }
   }
 
@@ -607,73 +672,12 @@ class _ShelfEdgePainter extends CustomPainter {
   bool shouldRepaint(_ShelfEdgePainter old) => false;
 }
 
-// ── Status Shelf Content ──────────────────────────────────────────────────────
-class _StatusShelfContent extends StatelessWidget {
-  final int dangerCount;
-  final int spoiledCount;
-  final int goodCount;
-  final int total;
-
-  const _StatusShelfContent({
-    required this.dangerCount,
-    required this.spoiledCount,
-    required this.goodCount,
-    required this.total,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        children: [
-          _StatusCard(count: goodCount,    label: 'Good',    bg: AppColors.goodBg,    textColor: AppColors.goodText),
-          const SizedBox(width: 8),
-          _StatusCard(count: dangerCount,  label: 'Danger',  bg: AppColors.dangerBg,  textColor: AppColors.dangerText),
-          const SizedBox(width: 8),
-          _StatusCard(count: spoiledCount, label: 'Spoiled', bg: AppColors.spoiledBg, textColor: AppColors.spoiledText),
-        ],
-      ),
-    );
-  }
-}
-
-class _StatusCard extends StatelessWidget {
-  final int count;
-  final String label;
-  final Color bg;
-  final Color textColor;
-
-  const _StatusCard({required this.count, required this.label, required this.bg, required this.textColor});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          color: bg.withOpacity(0.9),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: textColor.withOpacity(0.15), width: 0.5),
-        ),
-        child: Column(
-          children: [
-            Text('$count', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: textColor)),
-            const SizedBox(height: 2),
-            Text(label, style: TextStyle(fontSize: 10, color: textColor.withOpacity(0.8))),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ── Category Shelf Content ────────────────────────────────────────────────────
-class _CategoryShelfContent extends StatelessWidget {
+// ── Category Grid ─────────────────────────────────────────────────────────────
+class _CategoryGrid extends StatelessWidget {
   final List<PredictionItem> items;
   final void Function(PredictionItem) onTap;
 
-  const _CategoryShelfContent({required this.items, required this.onTap});
+  const _CategoryGrid({required this.items, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -709,12 +713,12 @@ class _FridgeItemCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: FridgeColors.cardBg,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: FridgeColors.cardBorder, width: 0.8),
+          border: Border.all(color: AppColors.border, width: 0.8),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withOpacity(0.04),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),
@@ -726,12 +730,12 @@ class _FridgeItemCard extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: FridgeColors.interiorWall,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(11)),
+                  color: AppColors.surfaceAlt,
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(11)),
                 ),
                 child: Stack(
                   children: [
-                    // Status dot
                     Positioned(
                       top: 6, right: 6,
                       child: Container(
@@ -742,16 +746,18 @@ class _FridgeItemCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // Icon
                     Center(
-                      child: Icon(item.icon, size: 32, color: AppColors.medium.withOpacity(0.85)),
+                      child: Icon(item.icon,
+                          size: 30,
+                          color: AppColors.medium.withOpacity(0.85)),
                     ),
                   ],
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 6),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 5, vertical: 6),
               child: Text(
                 item.itemName,
                 style: const TextStyle(
@@ -785,20 +791,16 @@ class _ErrorView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.wifi_off_rounded, size: 48, color: AppColors.textMuted),
+            const Icon(Icons.wifi_off_rounded,
+                size: 48, color: AppColors.textMuted),
             const SizedBox(height: 14),
             Text(message,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 13, color: AppColors.textSub)),
+                style:
+                    const TextStyle(fontSize: 13, color: AppColors.textSub)),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: onRetry,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              ),
               child: const Text('Retry'),
             ),
           ],
@@ -808,7 +810,7 @@ class _ErrorView extends StatelessWidget {
   }
 }
 
-// ── Item Detail Bottom Sheet ──────────────────────────────────────────────────
+// ── Item Detail Sheet ─────────────────────────────────────────────────────────
 class _ItemDetailSheet extends StatelessWidget {
   final PredictionItem item;
   const _ItemDetailSheet({required this.item});
@@ -825,20 +827,28 @@ class _ItemDetailSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Handle
           Center(
             child: Container(
               width: 36, height: 4,
-              decoration: BoxDecoration(color: AppColors.border, borderRadius: BorderRadius.circular(2)),
+              decoration: BoxDecoration(
+                  color: AppColors.border,
+                  borderRadius: BorderRadius.circular(2)),
             ),
           ),
           const SizedBox(height: 20),
 
+          // Header
           Row(
             children: [
               Container(
                 width: 52, height: 52,
-                decoration: BoxDecoration(color: AppColors.surfaceAlt, borderRadius: BorderRadius.circular(14)),
-                child: Icon(item.icon, size: 28, color: AppColors.medium),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceAlt,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child:
+                    Icon(item.icon, size: 28, color: AppColors.medium),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -846,54 +856,83 @@ class _ItemDetailSheet extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(item.itemName,
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+                        style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.textPrimary)),
                     const SizedBox(height: 2),
-                    Text(item.type, style: const TextStyle(fontSize: 12, color: AppColors.textSub)),
+                    Text(item.type,
+                        style: const TextStyle(
+                            fontSize: 12, color: AppColors.textSub)),
                   ],
                 ),
               ),
-              StatusBadge(label: item.statusLabel, bg: item.badgeBg, textColor: item.badgeText),
+              StatusBadge(
+                  label: item.statusLabel,
+                  bg: item.badgeBg,
+                  textColor: item.badgeText),
             ],
           ),
 
           const SizedBox(height: 20),
 
+          // Freshness bar
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Life remaining', style: TextStyle(fontSize: 12, color: AppColors.textSub)),
+              const Text('Life remaining',
+                  style:
+                      TextStyle(fontSize: 12, color: AppColors.textSub)),
               Text(item.daysLabel,
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: item.statusColor)),
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: item.statusColor)),
             ],
           ),
           const SizedBox(height: 6),
-          FreshnessBar(fraction: item.freshnessFraction, color: item.statusColor, height: 6),
+          FreshnessBar(
+              fraction: item.freshnessFraction,
+              color: item.statusColor,
+              height: 6),
 
           const SizedBox(height: 20),
 
+          // Details
           Container(
             padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(color: AppColors.surfaceAlt, borderRadius: BorderRadius.circular(14)),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceAlt,
+              borderRadius: BorderRadius.circular(14),
+              border:
+                  Border.all(color: AppColors.border, width: 0.8),
+            ),
             child: Column(
               children: [
-                // _InfoRow(label: 'Previous Temp', value: '${item.oldTemp}°C'),
-                // const SizedBox(height: 10),
+                _InfoRow(label: 'Previous Temp', value: '${item.oldTemp}°C'),
+                const SizedBox(height: 10),
                 _InfoRow(label: 'Current Temp',  value: '${item.newTemp}°C'),
                 const SizedBox(height: 10),
                 _InfoRow(label: 'Humidity',      value: '${item.humidity}%'),
-                // const SizedBox(height: 10),
-                // _InfoRow(label: 'Initial Life',  value: '${item.initialLife}h'),
-                // const SizedBox(height: 10),
-                // _InfoRow(label: 'Time Interval', value: '${item.timeBeforeTimeInBetween}h'),
                 const SizedBox(height: 10),
-                _InfoRow(label: 'Life Remaining', value: '${item.lifeRemaining}h'),
+                _InfoRow(label: 'Initial Life',  value: '${item.initialLife}h'),
+                const SizedBox(height: 10),
+                _InfoRow(label: 'Time Interval', value: '${item.timeBeforeTimeInBetween}h'),
+                const SizedBox(height: 10),
+                _InfoRow(
+                    label: 'Life Remaining',
+                    value: '${item.lifeRemaining}h'),
                 if (item.oldDecay != null) ...[
                   const SizedBox(height: 10),
-                  _InfoRow(label: 'Decay Rate', value: item.oldDecay!.toStringAsFixed(4)),
+                  _InfoRow(
+                      label: 'Decay Rate',
+                      value: item.oldDecay!.toStringAsFixed(4)),
                 ],
                 if (item.spikeDamage != null) ...[
                   const SizedBox(height: 10),
-                  _InfoRow(label: 'Spike Damage', value: item.spikeDamage!.toStringAsFixed(4)),
+                  _InfoRow(
+                      label: 'Spike Damage',
+                      value: item.spikeDamage!.toStringAsFixed(4)),
                 ],
               ],
             ),
@@ -906,13 +945,13 @@ class _ItemDetailSheet extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () => Navigator.pop(context),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                elevation: 0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
               ),
-              child: const Text('Close', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+              child: const Text('Close',
+                  style: TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w500)),
             ),
           ),
         ],
@@ -931,8 +970,14 @@ class _InfoRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: const TextStyle(fontSize: 12, color: AppColors.textSub)),
-        Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppColors.textPrimary)),
+        Text(label,
+            style: const TextStyle(
+                fontSize: 12, color: AppColors.textSub)),
+        Text(value,
+            style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary)),
       ],
     );
   }
