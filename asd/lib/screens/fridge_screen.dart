@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 String get _apiUrl {
   if (kIsWeb) return 'http://localhost/freshguard/get_items.php';
-  return 'http://10.0.2.2/freshguard/get_items.php';
+  return 'http://192.168.1.8/freshguard/get_items.php';
 }
 
 // ── Model ─────────────────────────────────────────────────────────────────────

@@ -26,7 +26,7 @@ class AppColors {
   static const Color goodColor  = Color(0xFF1A7A44);
 
   // ── Status: Acceptable ─────────────────────────────────────────────────────
-  static const Color acceptBg   = Color(0xFFFFF8DC);
+  static const Color acceptBg   = Color.fromARGB(255, 255, 225, 106);
   static const Color acceptText = Color(0xFF6B4D00);
   static const Color acceptColor = Color(0xFFB87800);
 

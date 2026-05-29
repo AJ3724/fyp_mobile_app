@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
 import '../theme.dart';
+import '../services/notification_service.dart';
 
 // ── Model ─────────────────────────────────────────────────────────────────────
 enum AlertType { spoiled, danger, acceptable, sensor }
@@ -193,7 +194,7 @@ class _AlertsScreenState extends State<AlertsScreen>
 
   String get _apiUrl => kIsWeb
       ? 'http://localhost/freshguard/get_alerts.php'
-      : 'http://10.0.2.2/freshguard/get_alerts.php';
+      : 'http://192.168.1.8/freshguard/get_alerts.php';
 
   @override
   void initState() {
@@ -216,6 +217,30 @@ class _AlertsScreenState extends State<AlertsScreen>
           _alerts = data.map((j) => AlertItem.fromJson(j)).toList();
           _loading = false;
         });
+
+        // ── Trigger notifications after loading ──────────────────────────
+        final spoiledItems =
+            _alerts.where((a) => a.type == AlertType.spoiled).toList();
+        final dangerItems =
+            _alerts.where((a) => a.type == AlertType.danger).toList();
+
+        if (spoiledItems.isNotEmpty) {
+          await NotificationService.showNotification(
+            id: 1,
+            title: '🚨 Spoiled Items in Your Fridge',
+            body:
+                '${spoiledItems.length} item${spoiledItems.length == 1 ? '' : 's'} spoiled. Remove them immediately!',
+          );
+        }
+
+        if (dangerItems.isNotEmpty) {
+          await NotificationService.showNotification(
+            id: 2,
+            title: '⚠️ Items Expiring Soon',
+            body:
+                '${dangerItems.length} item${dangerItems.length == 1 ? '' : 's'} will expire soon. Use them now!',
+          );
+        }
       } else {
         setState(() {
           _error = 'Server error: ${response.statusCode}';
@@ -268,6 +293,20 @@ class _AlertsScreenState extends State<AlertsScreen>
                       style: const TextStyle(
                           fontSize: 12, color: AppColors.textSub)),
                 const SizedBox(width: 10),
+                // ── Test notification button ─────────────────────────────
+                GestureDetector(
+                  onTap: () {
+                    NotificationService.showNotification(
+                      id: 0,
+                      title: '🧊 Fridge Check Reminder',
+                      body:
+                          'Time to check your fridge! Some items may need attention.',
+                    );
+                  },
+                  child: const Icon(Icons.notifications_active_rounded,
+                      color: AppColors.textSub),
+                ),
+                const SizedBox(width: 10),
                 GestureDetector(
                   onTap: _fetchAlerts,
                   child: const Icon(Icons.refresh_rounded,
@@ -313,8 +352,7 @@ class _AlertsScreenState extends State<AlertsScreen>
                                   lblColor: const Color(0xFFA04040),
                                   onTap: () => setState(
                                       () => _activeFilter = _Filter.spoiled),
-                                  isActive:
-                                      _activeFilter == _Filter.spoiled,
+                                  isActive: _activeFilter == _Filter.spoiled,
                                   activeColor: AppColors.spoiledColor,
                                 ),
                                 const SizedBox(width: 8),
@@ -336,8 +374,8 @@ class _AlertsScreenState extends State<AlertsScreen>
                                   bg: AppColors.acceptBg,
                                   numColor: AppColors.acceptText,
                                   lblColor: const Color(0xFF6B4D00),
-                                  onTap: () => setState(() =>
-                                      _activeFilter = _Filter.acceptable),
+                                  onTap: () => setState(
+                                      () => _activeFilter = _Filter.acceptable),
                                   isActive:
                                       _activeFilter == _Filter.acceptable,
                                   activeColor: const Color(0xFFB87800),
@@ -427,7 +465,8 @@ class _AlertsScreenState extends State<AlertsScreen>
                             ),
                           )
                         : SliverPadding(
-                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                            padding:
+                                const EdgeInsets.fromLTRB(16, 0, 16, 24),
                             sliver: SliverList(
                               delegate: SliverChildBuilderDelegate(
                                 (ctx, i) => Padding(
@@ -472,10 +511,8 @@ class _FridgeStatusCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // ── Fridge Illustration ──
           _FridgeIllustration(temp: temp),
           const SizedBox(width: 20),
-          // ── Stats ────────────────
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -507,8 +544,8 @@ class _FridgeStatusCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(20),
@@ -569,8 +606,8 @@ class _StatPill extends StatelessWidget {
               Icon(icon, size: 12, color: Colors.white70),
               const SizedBox(width: 4),
               Text(label,
-                  style:
-                      const TextStyle(fontSize: 9, color: Colors.white54)),
+                  style: const TextStyle(
+                      fontSize: 9, color: Colors.white54)),
             ],
           ),
           const SizedBox(height: 2),
@@ -603,7 +640,6 @@ class _FridgeIllustration extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // ── Freezer compartment ──
           Container(
             height: 30,
             margin: const EdgeInsets.all(4),
@@ -619,13 +655,11 @@ class _FridgeIllustration extends StatelessWidget {
               ],
             ),
           ),
-          // ── Divider line ─────────
           Container(
             height: 1,
             margin: const EdgeInsets.symmetric(horizontal: 4),
             color: Colors.white.withOpacity(0.2),
           ),
-          // ── Main compartment ─────
           Expanded(
             child: Container(
               margin: const EdgeInsets.all(4),
@@ -636,7 +670,6 @@ class _FridgeIllustration extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Shelf lines
                   _shelf(),
                   const SizedBox(height: 4),
                   _shelf(),
@@ -644,7 +677,6 @@ class _FridgeIllustration extends StatelessWidget {
               ),
             ),
           ),
-          // ── Handle ───────────────
           Center(
             child: Container(
               width: 16,
@@ -690,14 +722,10 @@ class _FilterBar extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                     horizontal: 14, vertical: 7),
                 decoration: BoxDecoration(
-                  color: isActive
-                      ? f.activeBg
-                      : AppColors.surface,
+                  color: isActive ? f.activeBg : AppColors.surface,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: isActive
-                        ? f.activeBg
-                        : AppColors.border,
+                    color: isActive ? f.activeBg : AppColors.border,
                     width: 1,
                   ),
                   boxShadow: isActive
@@ -714,10 +742,10 @@ class _FilterBar extends StatelessWidget {
                   f.label,
                   style: TextStyle(
                     fontSize: 12,
-                    fontWeight: isActive
-                        ? FontWeight.w600
-                        : FontWeight.w400,
-                    color: isActive ? Colors.white : AppColors.textSub,
+                    fontWeight:
+                        isActive ? FontWeight.w600 : FontWeight.w400,
+                    color:
+                        isActive ? Colors.white : AppColors.textSub,
                   ),
                 ),
               ),

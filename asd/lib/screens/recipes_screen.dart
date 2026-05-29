@@ -146,8 +146,8 @@ class _RecipesScreenState extends State<RecipesScreen> {
   bool _ingredientMode = false;
 
   String get _apiUrl => kIsWeb
-      ? 'http://localhost/freshguard/get_recipes.php'
-      : 'http://10.0.2.2/freshguard/get_recipes.php';
+    ? 'http://localhost/freshguard/get_recipes.php'
+    : 'http://192.168.1.8/freshguard/get_recipes.php';
 
   @override
   void initState() {

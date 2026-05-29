@@ -5,9 +5,11 @@ import 'screens/home_screen.dart';
 import 'screens/fridge_screen.dart';
 import 'screens/alerts_screen.dart';
 import 'screens/recipes_screen.dart';
+import 'services/notification_service.dart';
 
-void main() {
+void main () async {
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.init(); // ← add this
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.dark,
